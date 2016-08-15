@@ -1,0 +1,110 @@
+{
+    // http://palantir.github.io/tslint/rules/
+    "rules": {
+        // Requires explicit visibility declarations for class members
+        // "check-accessor" enforces explicit visibility on get/set accessors (can only be public)
+        "member-access": [true, "check-accessor"],
+
+        // Disallows the use of require statements except in import statements.
+        "no-var-requires": true,
+
+        // Requires type definitions to exist
+        "typedef": [true,
+            "call-signature",               // checks return type of functions.
+            "parameter",                    // checks type specifier of function parameters for non-arrow functions.
+            "arrow-parameter",              // checks type specifier of function parameters for arrow functions.
+            "property-declaration"          // checks return types of interface properties
+        ],
+
+        // Requires whitespace for type definitions
+        "typedef-whitespace":
+        [
+            true,
+            {
+                "call-signature": "nospace",
+                "index-signature": "nospace",
+                "parameter": "nospace",
+                "property-declaration": "nospace",
+                "variable-declaration": "nospace"
+            },
+            {
+                "call-signature": "onespace",
+                "index-signature": "onespace",
+                "parameter": "onespace",
+                "property-declaration": "onespace",
+                "variable-declaration": "onespace"
+            }
+        ],
+
+        // Enforces braces for if/for/do/while statements
+        "curly": true,
+
+        // Only allows labels in sensible locations
+        "label-position": true,
+
+        // Disallows use of arguments.callee.
+        "no-arg": true,
+
+        // Disallows bitwise operators
+        "no-bitwise": true,
+
+        // Disallows any type of assignment in conditionals
+        "no-conditional-assignment": true,
+
+        // Disallows access to the constructors of String, Number, and Boolean.
+        "no-construct": true,
+
+        // Disallows falling through case statements
+        "no-switch-case-fall-through": true,
+
+        // Disallows usage of the var keyword
+        "no-var-keyword": true,
+
+        // Requires the radix parameter to be specified when calling parseInt
+        "radix": true,
+
+        // Requires === and !== in place of == and !=.
+        "triple-equals": true,
+
+        // Enforces use of the isNaN() function to check for NaN references instead of a comparison to the NaN constant.
+        "use-isnan": true,
+
+    // Style
+
+        // Enforces PascalCased class and interface names.
+        "class-name": true,
+
+        // Requires interface names to begin with a capital ‘I’
+        "interface-name": [true, "always-prefix"],
+
+        // Requires the use of as Type for type assertions instead of <Type>.
+        "no-angle-bracket-type-assertion": true,
+
+        // Disallows parameter properties
+        "no-constructor-vars": true,
+
+        // do not allow semicolons
+        "semicolon": [true, "never"],
+
+        // Requires single quotes for string literals
+        "quotemark": [true, "single"],
+
+        // Checks variable names for various errors
+        // only camelCased or UPPER_CASED, allows underscores at the beginning
+        // disallows the use of certain TypeScript keywords (any, Number, number, String, string, Boolean, boolean, undefined) as variable or parameter names
+        "variable-name": [true, "ban-keywords", "check-format", "allow-leading-underscore"]
+
+        // "switch-default": true
+
+        // "no-unused-variable": true
+
+        // "no-string-literal": true
+
+        //"no-invalid-this": true
+
+        //"no-any": true
+
+        //"no-internal-module": true
+
+    }
+}
