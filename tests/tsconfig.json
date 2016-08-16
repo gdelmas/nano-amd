@@ -1,0 +1,8 @@
+{
+    "compilerOptions": {
+        "module": "amd",
+        "target": "es3",
+        "outDir": "../bin-tests/",
+        "sourceMap": true
+    }
+}
