@@ -1,6 +1,7 @@
 {
     "compilerOptions": {
         "target": "es3",
-        "outDir": "bin/"
+        "outDir": "bin/",
+        "sourceMap": true
     }
 }

@@ -1,9 +1,17 @@
-(function() {
-    let basePath: string
+(function(): void {
+    interface IFactoryData {
+        factory: Function,
+        dependencies: string[],
+        factoryParams: any[]
+    }
+
+
     let moduleMain: string
     let scriptParent: Node
 
-    const modules: { [id: string]: [string[], Function]|{} } = {}
+    let factories: { [id: string]: IFactoryData } = {}
+    const modules: { [id: string]: {} } = {}
+
     let currentScriptName: string = null
     const scriptStack: string[] = []
 
@@ -18,28 +26,29 @@
         return scriptElements[scriptElements.length - 1] as HTMLScriptElement
     }
 
-    function addScript(src: string): void
+    function queueModule(src: string): void
     {
         if ( modules.hasOwnProperty(src) ) {
             return
         }
 
-        modules[src] = null
+        modules[src] = {}
         scriptStack.push(src)
     }
 
     function shiftScriptStack(): void
     {
         if ( scriptStack.length <= 0 ) {
-            window['define'] = undefined
+            delete window['define']
             resolve(moduleMain)
+            factories = undefined
             return
         }
 
         currentScriptName = scriptStack.shift()
 
         const scriptElement = document.createElement('script')
-        scriptElement.src = basePath + currentScriptName + '.js'
+        scriptElement.src = currentScriptName + '.js'
 
         scriptParent.appendChild(scriptElement)
     }
@@ -60,7 +69,7 @@
                 continue
             }
 
-            if ( segment === '..' ) {
+            if ( segment === '..' && resolvedSegments.length > 0 && resolvedSegments[resolvedSegments.length - 1] !== '..' ) {
                 resolvedSegments.pop()
             }
             else {
@@ -76,22 +85,27 @@
         return url.substring(0, url.lastIndexOf('/'))
     }
 
-    function define(dependencies: string[], implementation: Function): void
+    function define(dependencies: string[], factory: Function): void
     {
         const moduleName = currentScriptName
         const modulePath = extractPath(moduleName)
 
         dependencies.splice(0, 2)
+        let absoluteDependencies: string[] = []
+        let params = [null, modules[moduleName]]
 
-        const absoluteDependencies = dependencies.map(function(str) {
-            return absolutePath(str, modulePath)
-        })
+        for ( const dependency of dependencies ) {
+            const absoluteDependency = absolutePath(dependency, modulePath)
 
-        modules[moduleName] = [absoluteDependencies, implementation]
+            queueModule(absoluteDependency)
+            absoluteDependencies.push(absoluteDependency)
+            params.push(modules[absoluteDependency])
+        }
 
-
-        for ( const dependency of absoluteDependencies ) {
-            addScript(dependency)
+        factories[moduleName] = {
+            factory: factory,
+            dependencies: absoluteDependencies,
+            factoryParams: params
         }
 
         shiftScriptStack()
@@ -99,26 +113,18 @@
 
     function resolve(moduleName: string): Object
     {
-        let module = modules[moduleName]
-
-        if ( module instanceof Array ) {
-            let exports = {}
-
-            const dependencyNames: string[] = module[0]
-            const implementation: Function = module[1]
-
-            let params = [null, exports]
-            for ( const dependencyName of dependencyNames ) {
-                params.push(resolve(dependencyName))
-            }
-
-            implementation.apply(window, params)
-
-            module = exports
-            modules[moduleName] = module
+        if ( !factories.hasOwnProperty(moduleName) ) {
+            return
         }
 
-        return module
+        const data: IFactoryData = factories[moduleName]
+        delete factories[moduleName]
+
+        for ( const dependency of data.dependencies ) {
+            resolve(dependency)
+        }
+
+        data.factory.apply(window, data.factoryParams)
     }
 
     window['define'] = define
@@ -131,15 +137,10 @@
     scriptParent = executingScriptElement.parentElement
 
     if ( !executingScriptElement.hasAttribute('data-main') ) {
-        throw new Error('no main module')
+        throw new Error('no main module specified (data-main attribute)')
     }
     moduleMain = executingScriptElement.getAttribute('data-main')
 
-    if ( !executingScriptElement.hasAttribute('data-base-path') ) {
-        throw new Error('no base path')
-    }
-    basePath = executingScriptElement.getAttribute('data-base-path')
-
-    addScript(moduleMain)
+    queueModule(moduleMain)
     shiftScriptStack()
 })()
