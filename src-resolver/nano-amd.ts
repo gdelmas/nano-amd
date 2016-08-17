@@ -1,30 +1,39 @@
-const modules = {}
-
-function define(name: string, dependencies: string[], implementation: Function): void
-{
-    modules[name] = [dependencies, implementation]
+interface IFactoryData {
+    factory: Function,
+    dependencies: string[],
 }
 
-function resolve(moduleName: string): Object
+const modules = {}
+const factories: { [id: string]: IFactoryData } = {}
+
+function define(name: string, dependencies: string[], factory: Function): void
 {
-    let module = modules[moduleName]
+    modules[name] = {}
 
-    if ( module instanceof Array ) {
-        let exports = {}
+    dependencies.splice(0, 2)
 
-        const dependencyNames: string[] = module[0]
-        const implementation: Function = module[1]
-
-        let params = [null, exports]
-        for ( let i = 2; i < dependencyNames.length; i++ ) {
-            params.push(resolve(dependencyNames[i]))
-        }
-
-        implementation.apply(window, params)
-
-        module = exports
-        modules[moduleName] = module
+    factories[name] = {
+        factory: factory,
+        dependencies: dependencies,
     }
 
-    return module
+}
+
+function resolve(name: string): Object
+{
+    if ( !factories.hasOwnProperty(name) ) {
+        return
+    }
+
+    const data: IFactoryData = factories[name]
+    delete factories[name]
+
+    let params = [null, modules[name]]
+
+    for ( const dependency of data.dependencies ) {
+        resolve(dependency)
+        params.push(modules[dependency])
+    }
+
+    data.factory.apply(window, params)
 }
