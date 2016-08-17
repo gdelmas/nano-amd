@@ -1,8 +1,7 @@
 (function(): void {
     interface IFactoryData {
         factory: Function,
-        dependencies: string[],
-        factoryParams: any[]
+        dependencies: string[]
     }
 
 
@@ -92,20 +91,17 @@
 
         dependencies.splice(0, 2)
         let absoluteDependencies: string[] = []
-        let params = [null, modules[moduleName]]
 
         for ( const dependency of dependencies ) {
             const absoluteDependency = absolutePath(dependency, modulePath)
 
             queueModule(absoluteDependency)
             absoluteDependencies.push(absoluteDependency)
-            params.push(modules[absoluteDependency])
         }
 
         factories[moduleName] = {
             factory: factory,
-            dependencies: absoluteDependencies,
-            factoryParams: params
+            dependencies: absoluteDependencies
         }
 
         shiftScriptStack()
@@ -120,11 +116,14 @@
         const data: IFactoryData = factories[moduleName]
         delete factories[moduleName]
 
+        let params = [null, modules[moduleName]]
+
         for ( const dependency of data.dependencies ) {
             resolve(dependency)
+            params.push(modules[dependency])
         }
 
-        data.factory.apply(window, data.factoryParams)
+        data.factory.apply(window, params)
     }
 
     window['define'] = define
