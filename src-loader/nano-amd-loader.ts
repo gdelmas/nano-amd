@@ -14,6 +14,10 @@
     let currentScriptName: string = null
     const scriptStack: string[] = []
 
+    // the scriptUrlSuffix can be used to force reloads with some browsers strange caching policies
+    // it has to be optional, so that debugging is possible. breakpoints get removed if an url query string changes
+    let scriptUrlSuffix: string = ''
+
     function lastScriptTag(): HTMLScriptElement
     {
         const scriptElements = document.getElementsByTagName('script')
@@ -47,7 +51,7 @@
         currentScriptName = scriptStack.shift()
 
         const scriptElement = document.createElement('script')
-        scriptElement.src = currentScriptName + '.js'
+        scriptElement.src = currentScriptName + '.js' + scriptUrlSuffix
 
         scriptParent.appendChild(scriptElement)
     }
@@ -139,6 +143,10 @@
         throw new Error('no main module specified (data-main attribute)')
     }
     moduleMain = executingScriptElement.getAttribute('data-main')
+
+    if ( executingScriptElement.hasAttribute('data-script-url-suffix') ) {
+        scriptUrlSuffix = executingScriptElement.getAttribute('data-script-url-suffix')
+    }
 
     queueModule(moduleMain)
     shiftScriptStack()
