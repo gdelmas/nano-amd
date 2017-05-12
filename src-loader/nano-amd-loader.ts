@@ -5,7 +5,7 @@
     }
 
 
-    let moduleMain: string
+    let modulesMain: string[] = []
     let scriptParent: Node
 
     let factories: { [id: string]: IFactoryData } = {}
@@ -39,12 +39,26 @@
         scriptStack.push(src)
     }
 
+    function loaderComplete(): void
+    {
+        delete window['define']
+
+        for ( const moduleMain of modulesMain ) {
+            resolve(moduleMain)
+        }
+
+        factories = undefined
+
+        // call hook for other nano modules, like nano-tests
+        if ( window.hasOwnProperty('nano') && window['nano'].hasOwnProperty('amdLoaderComplete') ) {
+            window['nano']['amdLoaderComplete'](modules)
+        }
+    }
+
     function shiftScriptStack(): void
     {
         if ( scriptStack.length <= 0 ) {
-            delete window['define']
-            resolve(moduleMain)
-            factories = undefined
+            loaderComplete()
             return
         }
 
@@ -142,12 +156,15 @@
     if ( !executingScriptElement.hasAttribute('data-main') ) {
         throw new Error('no main module specified (data-main attribute)')
     }
-    moduleMain = executingScriptElement.getAttribute('data-main')
+    modulesMain = executingScriptElement.getAttribute('data-main').split(/,\s*/)
 
     if ( executingScriptElement.hasAttribute('data-script-url-suffix') ) {
         scriptUrlSuffix = executingScriptElement.getAttribute('data-script-url-suffix')
     }
 
-    queueModule(moduleMain)
+    for ( const moduleMain of modulesMain ) {
+        queueModule(moduleMain)
+    }
+
     shiftScriptStack()
 })()
