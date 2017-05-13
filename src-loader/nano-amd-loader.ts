@@ -14,6 +14,9 @@
     let currentScriptName: string = null
     const scriptStack: string[] = []
 
+    // the basePath is prepended to every absolute path definition.
+    let basePath: string = ''
+
     // the scriptUrlSuffix can be used to force reloads with some browsers strange caching policies
     // it has to be optional, so that debugging is possible. breakpoints get removed if an url query string changes
     let scriptUrlSuffix: string = ''
@@ -111,7 +114,16 @@
         let absoluteDependencies: string[] = []
 
         for ( const dependency of dependencies ) {
-            const absoluteDependency = absolutePath(dependency, modulePath)
+            let absoluteDependency: string
+
+            if ( dependency.substr(0, 1) === '.' ) {
+                // relative path
+                absoluteDependency = absolutePath(dependency, modulePath)
+            }
+            else {
+                // absolute path
+                absoluteDependency = basePath + dependency
+            }
 
             queueModule(absoluteDependency)
             absoluteDependencies.push(absoluteDependency)
@@ -157,6 +169,10 @@
         throw new Error('no main module specified (data-main attribute)')
     }
     modulesMain = executingScriptElement.getAttribute('data-main').split(/,\s*/)
+
+    if ( executingScriptElement.hasAttribute('data-base-path') ) {
+        basePath = executingScriptElement.getAttribute('data-base-path')
+    }
 
     if ( executingScriptElement.hasAttribute('data-script-url-suffix') ) {
         scriptUrlSuffix = executingScriptElement.getAttribute('data-script-url-suffix')
