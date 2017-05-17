@@ -1,5 +1,6 @@
 import {B} from './B'
 
+console.log('this is in define A')
 
 export class A {
 
