@@ -81,7 +81,7 @@
         "no-angle-bracket-type-assertion": true,
 
         // Disallows parameter properties
-        "no-constructor-vars": true,
+//        "no-constructor-vars": true,
 
         // do not allow semicolons
         "semicolon": [true, "never"],
