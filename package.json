@@ -1,28 +1,31 @@
 {
   "author": "Gerard Delmàs",
-
   "name": "NanoAmd",
   "version": "1.0.0",
   "description": "A lightweight JavaScript AMD module loader and resolver",
-
   "homepage": "https://github.com/gdelmas/NanoAmd",
   "bugs": "https://github.com/gdelmas/NanoAmd/issues",
   "repository": {
-    "type" : "git",
-    "url" : "https://github.com/gdelmas/NanoAmd.git"
+    "type": "git",
+    "url": "https://github.com/gdelmas/NanoAmd.git"
   },
   "license": "MIT",
-
-  "keywords": ["amd", "module", "loader", "define", "require", "lightweight", "minimal", "small"],
-
+  "keywords": [
+    "amd",
+    "module",
+    "loader",
+    "define",
+    "require",
+    "lightweight",
+    "minimal",
+    "small"
+  ],
   "devDependencies": {
     "typescript": "~2.6.0"
   },
-
   "scripts": {
     "build": "tsc",
-    "prepublish": "npm run build",
-
+    "prepare": "npm run build",
     "build-tests": "tsc -p tests.tsconfig.json"
   }
 }
