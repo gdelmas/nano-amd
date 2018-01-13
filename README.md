@@ -1,5 +1,18 @@
 NanoAmd is a lightweight JavaScript AMD module loader and resolver. The resolver to bundle JavaScript into a single file implements AMD in just 25 lines of code.
 
+# Installation
+## From NPM
+
+     npm install --save-dev NanoAmd
+     
+## Manually
+
+Because NanoAmd is written in TypeScript it first has to be transpiled into JavaScript. The NPM package already contains the transpiled JavaScript files. You can also
+ 
+ 1. Clone this repository
+ 2. Transpile by executing TypeScript's `tsc`
+ 3. Copy the two transpiled JavaScript files from `dist` directory into your project
+
 # Usage
 
 ## Loader (for development)
@@ -12,12 +25,14 @@ Assuming the following project structure
          src/
              main.js
              some_module.js
-         lib/
-             nano-amd-loader.js
+         node_modules/
+             NanoAmd/
+                 dist/
+                     nano-amd-loader.js
      
 the `main` module will be loaded as entry point like this:
 
-    <script src="lib/nano-amd-loader.js" data-main="src/main"></script>
+    <script src="node_modules/NanoAmd/dist/nano-amd-loader.js" data-main="src/main"></script>
     
 #### Optional Attributes
 
@@ -27,7 +42,7 @@ The `data-script-url-suffix` attributes value will be appended to each modules U
 
 
 ## Resolver (for bundling)
-The resolver presumes that all JavaScript modules have been concatenated into one single file. Two additional scripts have to be concatenated before and after the module `define` part. Please use your favorite tool to do this.
+The resolver presumes that all JavaScript modules have been concatenated into one single file. Two additional scripts have to be concatenated before and after the module `define` part. Please use your favorite tool to do this. When installed from NPM the resolver can be found at this path: `node_modules/NanoAmd/dist/nano-amd-resolver.js`. 
 
 `nano-amd-resolver.js` + *all modules `define`* + *entry point `resolve`* = `deployment.js`
   
