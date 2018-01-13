@@ -1,0 +1,14 @@
+{
+    "compilerOptions": {
+        "target": "es3",
+        "module": "amd",
+        "sourceMap": false,
+
+        "strict": true,
+
+        "outDir": "tests-dist/"
+    },
+    "include": [
+        "tests/**/*.ts"
+    ]
+}
