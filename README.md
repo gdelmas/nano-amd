@@ -29,15 +29,15 @@ The `data-script-url-suffix` attributes value will be appended to each modules U
 ## Resolver (for bundling)
 The resolver presumes that all JavaScript modules have been concatenated into one single file. Two additional scripts have to be concatenated before and after the module `define` part. Please use your favorite tool to do this.
 
-`nano-amd.js` + *all modules `define`* + *entry point `resolve`* = `production.js`
+`nano-amd-resolver.js` + *all modules `define`* + *entry point `resolve`* = `deployment.js`
   
 The entry point `resolve` depends on the `define` of your main module from your bundling process. It should look similar to this:
 
     resolve('src/main');
     
-`production.js` can now be loaded with a simple `script` tag
+`deployment.js` can now be loaded with a simple `script` tag
 
-    <script src="production.js"></script>
+    <script src="deployment.js"></script>
 
 ---
    
