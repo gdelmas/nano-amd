@@ -1,13 +1,13 @@
 {
   "author": "Gerard Delmàs",
-  "name": "NanoAmd",
+  "name": "nano-amd",
   "version": "1.0.0",
   "description": "A lightweight JavaScript AMD module loader and resolver",
-  "homepage": "https://github.com/gdelmas/NanoAmd",
-  "bugs": "https://github.com/gdelmas/NanoAmd/issues",
+  "homepage": "https://github.com/gdelmas/nano-amd",
+  "bugs": "https://github.com/gdelmas/nano-amd/issues",
   "repository": {
     "type": "git",
-    "url": "https://github.com/gdelmas/NanoAmd.git"
+    "url": "https://github.com/gdelmas/nano-amd.git"
   },
   "license": "MIT",
   "keywords": [

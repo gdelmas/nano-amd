@@ -1,13 +1,13 @@
-NanoAmd is a lightweight JavaScript AMD module loader and resolver. The resolver to bundle JavaScript into a single file implements AMD in just 25 lines of code.
+nano-amd is a lightweight JavaScript AMD module loader and resolver. The resolver to bundle JavaScript into a single file implements AMD in just 25 lines of code.
 
 # Installation
 ## From NPM
 
-     npm install --save-dev NanoAmd
+     npm install --save-dev nano-amd
      
 ## Manually
 
-Because NanoAmd is written in TypeScript it first has to be transpiled into JavaScript. The NPM package already contains the transpiled JavaScript files. You can also
+Because nano-amd is written in TypeScript it first has to be transpiled into JavaScript. The NPM package already contains the transpiled JavaScript files. You can also
  
  1. Clone this repository
  2. Transpile by executing TypeScript's `tsc`
@@ -26,13 +26,13 @@ Assuming the following project structure
              main.js
              some_module.js
          node_modules/
-             NanoAmd/
+             nano-amd/
                  dist/
                      nano-amd-loader.js
      
 the `main` module will be loaded as entry point like this:
 
-    <script src="node_modules/NanoAmd/dist/nano-amd-loader.js" data-main="src/main"></script>
+    <script src="node_modules/nano-amd/dist/nano-amd-loader.js" data-main="src/main"></script>
     
 #### Optional Attributes
 
@@ -42,7 +42,7 @@ The `data-script-url-suffix` attributes value will be appended to each modules U
 
 
 ## Resolver (for bundling)
-The resolver presumes that all JavaScript modules have been concatenated into one single file. Two additional scripts have to be concatenated before and after the module `define` part. Please use your favorite tool to do this. When installed from NPM the resolver can be found at this path: `node_modules/NanoAmd/dist/nano-amd-resolver.js`. 
+The resolver presumes that all JavaScript modules have been concatenated into one single file. Two additional scripts have to be concatenated before and after the module `define` part. Please use your favorite tool to do this. When installed from NPM the resolver can be found at this path: `node_modules/nano-amd/dist/nano-amd-resolver.js`. 
 
 `nano-amd-resolver.js` + *all modules `define`* + *entry point `resolve`* = `deployment.js`
   
@@ -57,4 +57,4 @@ The entry point `resolve` depends on the `define` of your main module from your 
 ---
    
 ### Compatibility
-NanoAmd has been tested with IE 9 and newer browsers.
+nano-amd has been tested with IE 9 and newer browsers.
