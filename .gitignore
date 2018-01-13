@@ -2,5 +2,7 @@
 /.idea/workspace.xml
 /.idea/tasks.xml
 
-/bin*/
 /node_modules
+
+/dist
+/tests-dist
