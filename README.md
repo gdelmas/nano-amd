@@ -1,3 +1,6 @@
+[![npm package](https://img.shields.io/npm/v/nano-amd.svg?style=flat-square)](https://www.npmjs.org/package/nano-amd)
+[![npm dependencies](https://img.shields.io/badge/dependencies-none-brightgreen.svg?style=flat-square)](https://github.com/gdelmas/nano-amd/blob/master/package.json)
+
 nano-amd is a lightweight JavaScript AMD module loader and resolver. The resolver to bundle JavaScript into a single file implements AMD in just 25 lines of code.
 
 # Installation
@@ -9,7 +12,7 @@ nano-amd is a lightweight JavaScript AMD module loader and resolver. The resolve
 
 Because nano-amd is written in TypeScript it first has to be transpiled into JavaScript. The NPM package already contains the transpiled JavaScript files. You can also
  
- 1. Clone this repository
+ 1. Clone [this repository](https://github.com/gdelmas/nano-amd)
  2. Transpile by executing TypeScript's `tsc`
  3. Copy the two transpiled JavaScript files from `dist` directory into your project
 
