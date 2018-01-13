@@ -1,7 +1,18 @@
 {
     "compilerOptions": {
         "target": "es3",
-        "outDir": "bin/",
-        "sourceMap": true
-    }
+        "sourceMap": false,
+
+        "noImplicitAny": true,
+        "noImplicitThis": true,
+        "strictNullChecks": true,
+        "strictFunctionTypes": true,
+
+        "noImplicitUseStrict": true,
+
+        "outDir": "dist/"
+    },
+    "include": [
+        "src-*/*.ts"
+    ]
 }

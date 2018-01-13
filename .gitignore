@@ -3,3 +3,4 @@
 /.idea/tasks.xml
 
 /bin*/
+/node_modules
