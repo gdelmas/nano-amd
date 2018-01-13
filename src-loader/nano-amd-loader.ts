@@ -6,12 +6,12 @@
 
 
     let modulesMain: string[] = []
-    let scriptParent: Node
+    let scriptParent: HTMLElement
 
     let factories: { [id: string]: IFactoryData } = {}
     const modules: { [id: string]: {} } = {}
 
-    let currentScriptName: string = null
+    let currentScriptName: string | null = null
     const scriptStack: string[] = []
 
     // the basePath is prepended to every absolute path definition.
@@ -21,7 +21,7 @@
     // it has to be optional, so that debugging is possible. breakpoints get removed if an url query string changes
     let scriptUrlSuffix: string = ''
 
-    function lastScriptTag(): HTMLScriptElement
+    function lastScriptTag(): HTMLScriptElement | null
     {
         const scriptElements = document.getElementsByTagName('script')
 
@@ -44,17 +44,18 @@
 
     function loaderComplete(): void
     {
-        delete window['define']
+        delete (window as any)['define']
 
         for ( const moduleMain of modulesMain ) {
             resolve(moduleMain)
         }
 
-        factories = undefined
+        // delete factories for cleanup
+        (factories as any) = undefined
 
         // call hook for other nano modules, like nano-tests
-        if ( window.hasOwnProperty('nano') && window['nano'].hasOwnProperty('amdLoaderComplete') ) {
-            window['nano']['amdLoaderComplete'](modules)
+        if ( window.hasOwnProperty('nano') && (window as any)['nano'].hasOwnProperty('amdLoaderComplete') ) {
+            (window as any)['nano']['amdLoaderComplete'](modules)
         }
     }
 
@@ -65,7 +66,7 @@
             return
         }
 
-        currentScriptName = scriptStack.shift()
+        currentScriptName = scriptStack.shift()!
 
         const scriptElement = document.createElement('script')
         scriptElement.src = currentScriptName + '.js' + scriptUrlSuffix
@@ -107,8 +108,12 @@
 
     function define(dependencies: string[], factory: Function): void
     {
-        const moduleName = currentScriptName
-        const modulePath = extractPath(moduleName)
+        if ( currentScriptName === null ) {
+            throw new Error('internal error: currentScriptName was not initialized')
+        }
+
+        const moduleName: string = currentScriptName
+        const modulePath: string = extractPath(moduleName)
 
         dependencies.splice(0, 2)
         let absoluteDependencies: string[] = []
@@ -137,7 +142,7 @@
         shiftScriptStack()
     }
 
-    function resolve(moduleName: string): Object
+    function resolve(moduleName: string): void
     {
         if ( !factories.hasOwnProperty(moduleName) ) {
             return
@@ -156,26 +161,30 @@
         data.factory.apply(window, params)
     }
 
-    window['define'] = define
+    (window as any)['define'] = define
 
-    const executingScriptElement = lastScriptTag()
+    const executingScriptElement: HTMLScriptElement | null = lastScriptTag()
     if ( executingScriptElement === null ) {
         throw new Error('can not detect executing script')
     }
 
-    scriptParent = executingScriptElement.parentElement
+    const parentElement = executingScriptElement.parentElement
+    if ( parentElement === null ) {
+        throw new Error('can not get parent element from executing script tag')
+    }
+    scriptParent = parentElement
 
     if ( !executingScriptElement.hasAttribute('data-main') ) {
         throw new Error('no main module specified (data-main attribute)')
     }
-    modulesMain = executingScriptElement.getAttribute('data-main').split(/,\s*/)
+    modulesMain = executingScriptElement.getAttribute('data-main')!.split(/,\s*/)
 
     if ( executingScriptElement.hasAttribute('data-base-path') ) {
-        basePath = executingScriptElement.getAttribute('data-base-path')
+        basePath = executingScriptElement.getAttribute('data-base-path')!
     }
 
     if ( executingScriptElement.hasAttribute('data-script-url-suffix') ) {
-        scriptUrlSuffix = executingScriptElement.getAttribute('data-script-url-suffix')
+        scriptUrlSuffix = executingScriptElement.getAttribute('data-script-url-suffix')!
     }
 
     for ( const moduleMain of modulesMain ) {

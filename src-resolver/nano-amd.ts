@@ -3,7 +3,7 @@ interface IFactoryData {
     dependencies: string[],
 }
 
-const modules = {}
+const modules: { [id: string]: any } = {}
 const factories: { [id: string]: IFactoryData } = {}
 
 function define(name: string, dependencies: string[], factory: Function): void
@@ -19,7 +19,7 @@ function define(name: string, dependencies: string[], factory: Function): void
 
 }
 
-function resolve(name: string): Object
+function resolve(name: string): void
 {
     if ( !factories.hasOwnProperty(name) ) {
         return
