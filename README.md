@@ -1,7 +1,7 @@
 [![npm package](https://img.shields.io/npm/v/nano-amd.svg?style=flat-square)](https://www.npmjs.org/package/nano-amd)
 [![npm dependencies](https://img.shields.io/badge/dependencies-none-brightgreen.svg?style=flat-square)](https://github.com/gdelmas/nano-amd/blob/master/package.json)
 
-nano-amd is a lightweight JavaScript AMD module loader and resolver. The resolver to bundle JavaScript into a single file implements AMD in just [25 lines of JavaScript code](https://unpkg.com/nano-amd/dist/nano-amd-resolver.js).
+nano-amd is a lightweight JavaScript AMD module loader and resolver. The resolver to bundle JavaScript into a single file implements AMD in just [25 lines of JavaScript code](https://unpkg.com/nano-amd/dist/nano-amd-resolver.js). This is finally **0.22 KB** minified & gziped.
 
 # Installation
 ## From npm
